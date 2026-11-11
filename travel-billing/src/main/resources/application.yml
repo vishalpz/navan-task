@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: travel-billing
+
+  # Used when you run Postgres yourself. With spring-boot-docker-compose on the
+  # classpath, `mvn spring-boot:run` starts docker-compose.yml and wires these up automatically.
+  datasource:
+    url: jdbc:postgresql://localhost:5432/travelbilling
+    username: travelbilling
+    password: travelbilling
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  jackson:
+    # API uses snake_case (external_id, tax_lines, occurred_at) like the brief and fixtures
+    property-naming-strategy: SNAKE_CASE
+    deserialization:
+      # Money: read JSON decimals straight into BigDecimal, never via double
+      use-big-decimal-for-floats: true
+    serialization:
+      write-dates-as-timestamps: false
+    generator:
+      write-bigdecimal-as-plain: true
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
